@@ -1,3 +1,4 @@
+"""General purpose plotting script."""
 import matplotlib
 import numpy as np
 import argparse as ag
@@ -6,9 +7,9 @@ from matplotlib import pyplot as plt
 matplotlib.use('TkAgg')
 
 # argument parsing
-parser = ag.ArgumentParser(description="""Universal command line plotting script
-                           using python3 and libraries: argparse, numpy and
-                           matplotlib.""")
+parser = ag.ArgumentParser(description="""Universal command line plotting
+                           script using python3 and libraries: argparse, numpy
+                           and matplotlib.""")
 parser.add_argument("plottype", type=str, metavar="ptype", default="xy",
                     choices=["xy", "bar", "hist"],
                     help="type of plot")
@@ -71,7 +72,7 @@ if args.plottype == "xy":
                            marker=args.marker,
                            label=f"col:{col}")
                 ax[i].legend(frameon=False)
-            fig.suptitle(f"{args.files[file]}")
+            fig.suptitle(fr"{args.files[file]}".replace("_", r"\_"))
             plt.tight_layout()
             if file == len(data) - 1:
                 plt.show(block=True)
@@ -93,7 +94,7 @@ if args.plottype == "xy":
                         marker=args.marker,
                         label=f"col:{col}")
                 ax.legend(frameon=False)
-            fig.suptitle(f"{args.files[file]}")
+            fig.suptitle(fr"{args.files[file]}".replace(r"_", r"\_"))
             plt.tight_layout()
             if file == len(data) - 1:
                 plt.show(block=True)
@@ -113,7 +114,7 @@ if args.plottype == "xy":
                         color=f"C{col - 1}",
                         linestyle=args.linestyle,
                         marker=args.marker)
-                fig.suptitle(f"{args.files[file]}:{col}")
+                fig.suptitle(fr"{args.files[file]}:{col}".replace(r"_", r"\_"))
                 plt.tight_layout()
                 if file == len(data) - 1 and col == cols[-1]:
                     plt.show(block=True)
@@ -135,7 +136,7 @@ if args.plottype == "bar":
                           width=0.9 * (data[file][1, 0] - data[file][0, 0]),
                           color=f"C{col - 1}", label=f"col:{col}")
                 ax[i].legend(frameon=False)
-            fig.suptitle(f"{args.files[file]}")
+            fig.suptitle(fr"{args.files[file]}".replace(r"_", r"\_"))
             plt.tight_layout()
             if file == len(data) - 1:
                 plt.show(block=True)
@@ -152,7 +153,7 @@ if args.plottype == "bar":
                 fig, ax = plt.subplots()
                 ax.bar(data[file][:, 0], data[file][:, col],
                        width=0.9 * (data[file][1, 0] - data[file][0, 0]),
-                       label=f"{args.files[file]}:{col}")
+                       label=fr"{args.files[file]}:{col}".replace(r"_", r"\_"))
                 ax.legend(frameon=False)
                 plt.tight_layout()
                 if file == len(data) - 1 and col == cols[-1]:
@@ -174,7 +175,8 @@ if args.plottype == "hist":
             for col in cols:
                 fig, ax = plt.subplots()
                 ax.hist(data[file][:, col],
-                        label=f"{args.files[file]}:{col}")
+                        label=fr"{args.files[file]}:{col}".replace(r"_",
+                                                                   r"\_"))
                 ax.legend(frameon=False)
                 plt.tight_layout()
                 if file == len(data) - 1 and col == cols[-1]:
@@ -193,7 +195,7 @@ if args.plottype == "hist":
                 ax[i].hist(data[file][:, col], bins=args.bins,
                            color=f"C{col - 1}", label=f"col:{col}")
                 ax[i].legend(frameon=False)
-            fig.suptitle(f"{args.files[file]}")
+            fig.suptitle(fr"{args.files[file]}".replace(r"_", r"\_"))
             plt.tight_layout()
             if file == len(data) - 1:
                 plt.show(block=True)
