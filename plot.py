@@ -4,7 +4,7 @@ import numpy as np
 import argparse as ag
 from matplotlib import pyplot as plt
 
-matplotlib.use('TkAgg')
+matplotlib.use('TKagg')
 
 # argument parsing
 parser = ag.ArgumentParser(description="""Universal command line plotting
@@ -168,38 +168,61 @@ if args.plottype == "hist":
     # unstacked and unjoin
     if not args.stack and not args.join:
         for file in range(len(data)):
-            if args.cols:
-                cols = args.cols
+            if len(shapes[file]) > 1:
+                if args.cols:
+                    cols = args.cols
+                else:
+                    cols = range(1, shapes[file][-1])
+                for col in cols:
+                    fig, ax = plt.subplots()
+                    ax.hist(data[file][:, col],
+                            label=fr"{args.files[file]}:{col}".replace(r"_",
+                                                                       r"\_"))
+                    ax.legend(frameon=False)
+                    plt.tight_layout()
+                    if file == len(data) - 1 and col == cols[-1]:
+                        plt.show(block=True)
+                    else:
+                        plt.show(block=False)
             else:
-                cols = range(1, shapes[file][-1])
-            for col in cols:
                 fig, ax = plt.subplots()
-                ax.hist(data[file][:, col],
-                        label=fr"{args.files[file]}:{col}".replace(r"_",
-                                                                   r"\_"))
+                ax.hist(data[file][:],
+                        label=fr"{args.files[file]}".replace(r"_", r"\_"))
                 ax.legend(frameon=False)
                 plt.tight_layout()
-                if file == len(data) - 1 and col == cols[-1]:
+                if file == len(data) - 1:
                     plt.show(block=True)
                 else:
                     plt.show(block=False)
+
     # stacked
     if args.stack:
         for file in range(len(data)):
-            if args.cols:
-                cols = args.cols
+            if len(shapes[file]) > 1:
+                if args.cols:
+                    cols = args.cols
+                else:
+                    cols = range(1, shapes[file][-1])
+                fig, ax = plt.subplots(len(cols), sharex=True)
+                for i, col in enumerate(cols):
+                    ax[i].hist(data[file][:, col], bins=args.bins,
+                               color=f"C{col - 1}", label=f"col:{col}")
+                    ax[i].legend(frameon=False)
+                fig.suptitle(fr"{args.files[file]}".replace(r"_", r"\_"))
+                plt.tight_layout()
+                if file == len(data) - 1:
+                    plt.show(block=True)
+                else:
+                    plt.show(block=False)
             else:
-                cols = range(1, shapes[file][-1])
-            fig, ax = plt.subplots(len(cols), sharex=True)
-            for i, col in enumerate(cols):
-                ax[i].hist(data[file][:, col], bins=args.bins,
-                           color=f"C{col - 1}", label=f"col:{col}")
-                ax[i].legend(frameon=False)
-            fig.suptitle(fr"{args.files[file]}".replace(r"_", r"\_"))
-            plt.tight_layout()
-            if file == len(data) - 1:
-                plt.show(block=True)
-            else:
-                plt.show(block=False)
+                fig, ax = plt.subplots()
+                ax.hist(data[file][:],
+                        label=fr"{args.files[file]}".replace(r"_", r"\_"))
+                ax.legend(frameon=False)
+                plt.tight_layout()
+                if file == len(data) - 1:
+                    plt.show(block=True)
+                else:
+                    plt.show(block=False)
     if args.join:
         raise Exception("Cannot use --join with plottype bar!")
