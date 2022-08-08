@@ -175,7 +175,7 @@ if args.plottype == "hist":
                     cols = range(1, shapes[file][-1])
                 for col in cols:
                     fig, ax = plt.subplots()
-                    ax.hist(data[file][:, col],
+                    ax.hist(data[file][:, col], bins=args.bins,
                             label=fr"{args.files[file]}:{col}".replace(r"_",
                                                                        r"\_"))
                     ax.legend(frameon=False)
@@ -186,7 +186,7 @@ if args.plottype == "hist":
                         plt.show(block=False)
             else:
                 fig, ax = plt.subplots()
-                ax.hist(data[file][:],
+                ax.hist(data[file][:], bins=args.bins,
                         label=fr"{args.files[file]}".replace(r"_", r"\_"))
                 ax.legend(frameon=False)
                 plt.tight_layout()
@@ -216,7 +216,7 @@ if args.plottype == "hist":
                     plt.show(block=False)
             else:
                 fig, ax = plt.subplots()
-                ax.hist(data[file][:],
+                ax.hist(data[file][:], bins=args.bins,
                         label=fr"{args.files[file]}".replace(r"_", r"\_"))
                 ax.legend(frameon=False)
                 plt.tight_layout()
