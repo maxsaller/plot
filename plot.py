@@ -23,6 +23,8 @@ parser.add_argument("--bins", "-b", type=int, default=100,
                     help="number of bins for histogram.")
 parser.add_argument("--cols", "-c", type=int, nargs="+",
                     help="columns to plot.")
+parser.add_argument("--exact", "-x", type=str, default=None,
+                    help="exact/benchmark data.")
 parser.add_argument("--linestyle", "-ls", type=str, default="solid",
                     choices=["solid", "dashed", "dashdot", "dotted", "none"],
                     help="Linestyle to draw with")
@@ -41,6 +43,7 @@ ls_dict = {"solid": "-",
            "dashdot": "-.",
            "dotted": ":",
            "none": " "}
+ls_list = ["-", "--", "-.", ":"]
 args.linestyle = ls_dict[args.linestyle]
 
 # reading data from files
@@ -52,6 +55,13 @@ for i, file in enumerate(args.files):
         shapes.append(data[i].shape)
     except OSError:
         print(f"Error: File <{file}> not found!")
+
+if args.exact is not None:
+    try:
+        exact = np.genfromtxt(args.exact)
+        xshape = exact.shape
+    except OSError:
+        print(f"Error: File <{args.exact}> not found!")
 
 
 # plotting xy
@@ -65,6 +75,14 @@ if args.plottype == "xy":
                 cols = range(1, shapes[file][-1])
             fig, ax = plt.subplots(len(cols), sharex=True)
             for i, col in enumerate(cols):
+                if args.exact is not None:
+                    for j in range(1, xshape[-1]):
+                        ax[i].plot(exact[::args.skip, 0],
+                                   exact[::args.skip, j],
+                                   color="black",
+                                   linestyle=ls_list[j-1],
+                                   marker=args.marker,
+                                   label=f"Exact:{j}")
                 ax[i].plot(data[file][::args.skip, 0],
                            data[file][::args.skip, col],
                            color=f"C{col - 1}",
@@ -86,6 +104,14 @@ if args.plottype == "xy":
                 cols = args.cols
             else:
                 cols = range(1, shapes[file][-1])
+            if args.exact is not None:
+                for j in range(1, xshape[-1]):
+                    ax.plot(exact[::args.skip, 0],
+                            exact[::args.skip, j],
+                            color="black",
+                            linestyle=ls_list[j-1],
+                            marker=args.marker,
+                            label=f"Exact:{j}")
             for col in cols:
                 ax.plot(data[file][::args.skip, 0],
                         data[file][::args.skip, col],
@@ -109,6 +135,14 @@ if args.plottype == "xy":
                 cols = range(1, shapes[file][-1])
             for col in cols:
                 fig, ax = plt.subplots()
+                if args.exact is not None:
+                    for j in range(1, xshape[-1]):
+                        ax.plot(exact[::args.skip, 0],
+                                exact[::args.skip, j],
+                                color="black",
+                                linestyle=ls_list[j-1],
+                                marker=args.marker,
+                                label=f"Exact:{j}")
                 ax.plot(data[file][::args.skip, 0],
                         data[file][::args.skip, col],
                         color=f"C{col - 1}",
