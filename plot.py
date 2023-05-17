@@ -10,11 +10,11 @@ matplotlib.use('TKagg')
 parser = ag.ArgumentParser(description="""Universal command line plotting
                            script using python3 and libraries: argparse, numpy
                            and matplotlib.""")
-parser.add_argument("plottype", type=str, metavar="ptype", default="xy",
-                    choices=["xy", "bar", "hist"],
-                    help="type of plot")
 parser.add_argument("files", type=str, nargs="+",
                     help="data files to plot from")
+parser.add_argument("--type", "-t", type=str, default="xy",
+                    choices=["xy", "bar", "hist"],
+                    help="type of plot")
 parser.add_argument("--stack", "-s", action="store_true", default=False,
                     help="stack file columns in one plot.")
 parser.add_argument("--join", "-j", action="store_true", default=False,
