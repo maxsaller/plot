@@ -65,7 +65,7 @@ if args.exact is not None:
 
 
 # plotting xy
-if args.plottype == "xy":
+if args.type == "xy":
     # stacked
     if args.stack:
         for file in range(len(data)):
@@ -156,7 +156,7 @@ if args.plottype == "xy":
                     plt.show(block=False)
 
 # plotting bar
-if args.plottype == "bar":
+if args.type == "bar":
     # stacked
     if args.stack:
         for file in range(len(data)):
@@ -198,7 +198,7 @@ if args.plottype == "bar":
         raise Exception("Cannot use --join with plottype bar!")
 
 # plotting hist
-if args.plottype == "hist":
+if args.type == "hist":
     # unstacked and unjoin
     if not args.stack and not args.join:
         for file in range(len(data)):
