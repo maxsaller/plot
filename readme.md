@@ -46,4 +46,4 @@ The following optional arguments are available:
 | `-x`  / `--exact`     | Link to a file containing exact/benchmark data. Each column will be plotted! |
 | `-ls` / `--linestyle` | Line style for xy plotstyle (solid, dashed, dashdot, dotted, none)           |
 | `-m`  / `--marker`    | Marker style for xy plots (".", ",", "o", "s", "x", "+", "^", "v", " ")      |
-| `-s`  / `--skip`      | Data point skip interval for large/dense datasets.                           |
+| `--skip`              | Data point skip interval for large/dense datasets.                           |
